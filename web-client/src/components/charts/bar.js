@@ -1,6 +1,11 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  // height: 100%;
+`;
 
 const BarChart = () => {
   const data = {
@@ -38,7 +43,7 @@ const BarChart = () => {
     },
   };
 
-  return <Bar data={data} options={options} />;
+  return <Wrapper><Bar data={data} options={options} /></Wrapper>;
 };
 
 export default BarChart;

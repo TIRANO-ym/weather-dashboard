@@ -3,19 +3,69 @@ import BarChart from "../components/charts/bar";
 import { useEffect } from "react";
 import apiService from "../services/apiService";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 35% 65%;
+`;
+
+const LeftBox = styled.div`
+  background-color: green;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 60% 20% 20%;
+  padding: 0 10px;
+`;
+const LeftInfo1 = styled.div`
+  border: 2px solid red;
+`;
+const LeftInfo2 = styled.div`
+  border: 2px solid red;
+`;
+const LeftInfo3 = styled.div`
+  border: 2px solid red;
+`;
+
+const RightBox = styled.div`
+  background-color: blue;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 20% 35% 45%;
+  padding: 0 10px;
+`;
+
+const RightInfo1 = styled.div`
+  border: 2px solid red;
+`;
+const RightInfo2 = styled.div`
+  border: 2px solid red;
+`;
+const RightInfo3 = styled.div`
+  border: 2px solid red;
+`;
 
 function Dashboard() {
-  useEffect(() => {
-    // init test
-    apiService.get('/weather').then((res) => {
-      console.log('#### res: ', res);
-    });
-  }, []);
+  // useEffect(() => {
+  //   // init test
+  //   apiService.get('/weather').then((res) => {
+  //     console.log('#### res: ', res);
+  //   });
+  // }, []);
   return (
     <Wrapper>
-      Dashboard
-      <BarChart />
+      <LeftBox>
+        <LeftInfo1></LeftInfo1>
+        <LeftInfo2></LeftInfo2>
+        <LeftInfo3></LeftInfo3>
+      </LeftBox>
+      <RightBox>
+        <RightInfo1></RightInfo1>
+        <RightInfo2>
+          <BarChart />
+        </RightInfo2>
+        <RightInfo3></RightInfo3>
+      </RightBox>
     </Wrapper>
   )
 }
