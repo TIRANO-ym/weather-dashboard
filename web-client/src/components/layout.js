@@ -27,7 +27,7 @@ const Content = styled.div`
 `;
 
 const LeftBar = styled.div`
-  width: 150px;
+  width: 150px !important;
   height: auto;
   background-color: blue;
 	-webkit-animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
@@ -35,10 +35,13 @@ const LeftBar = styled.div`
 `;
 
 export default function Layout() {
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const clickMenuIcon = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  // FIXME: 메뉴 나타나도 canvas 크기가 고정되어 150px이 채워지지 않음.
+  // FIXME: react-chartjs-2 삭제??
 
   return (
     <Wrapper>

@@ -1,16 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
+// import { Bar } from 'react-chartjs-2';
+// import 'chart.js/auto';
 import styled from 'styled-components';
 import {
   Chart,
+  LineController,
   CategoryScale,
   LinearScale,
   PointElement,
-  BarController,
+  LineElement,
   TimeScale,
   Title,
   Tooltip,
   Legend,
-  BarElement,
+  Filler,
 } from "chart.js";
 
 const Wrapper = styled.div`
@@ -18,7 +21,7 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-const BarChart = () => {
+const LineChart = () => {
   const wrapperRef = useRef(null);
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
@@ -50,24 +53,30 @@ const BarChart = () => {
   }, []);
 
   const setData = () => {
-    const NUMBER_CFG = [5, 7, 4, 8, 5, 3, 2];
-
     chartData = {
       labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
       datasets: [
         {
           label: 'Dataset 1',
-          data: NUMBER_CFG,
+          data: [5, 7, 4, 8, 5, 3, 2],
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1
+          borderWidth: 1,
+          pointRadius: 5, // 포인트 크기
+          pointBackgroundColor: "rgba(255, 99, 132, 1)", // 포인트 배경색
+          pointBorderColor: "rgba(255, 255, 255, 1)", // 포인트 테두리 색
+          pointHoverRadius: 7, // 호버 시 포인트 크기
+          pointHoverBackgroundColor: "rgba(255, 99, 132, 1)", // 호버 시 포인트 배경색
+          pointHoverBorderColor: "rgba(255, 255, 255, 1)", // 호버 시 포인트 테두리 색
+          fill: 'origin', // 라인 그래프에서 영역 채우기
+          tension: 0.3
         },
         {
           label: 'Dataset 2',
-          data: NUMBER_CFG,
+          data: [3, 9, 6, 2, 3, 8, 1],
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
+          borderWidth: 3
         }
       ]
     };
@@ -76,18 +85,19 @@ const BarChart = () => {
   const createChart = () => {
     const ctx = chartRef.current.getContext("2d");
     Chart.register(
-      BarController,
+      LineController,
       CategoryScale,
       LinearScale,
       PointElement,
-      BarElement,
+      LineElement,
       TimeScale,
       Title,
       Tooltip,
-      Legend
+      Legend,
+      Filler
     );
     chartInstance = new Chart(ctx, {
-      type: 'bar',
+      type: 'line',
       data: chartData,
       options: {
         maintainAspectRatio: false,
@@ -101,6 +111,18 @@ const BarChart = () => {
             max: 10, // 최대값 설정
           },
         },
+        // plugins: {
+        //   legend: {
+        //     position: 'top',
+        //   },
+        //   filler: {
+        //     propagate: true
+        //   }
+        //   // title: {
+        //   //   display: true,
+        //   //   text: 'Chart.js Polar Area Chart'
+        //   // }
+        // }
       },
     });
   };
@@ -125,4 +147,4 @@ const BarChart = () => {
   return <Wrapper ref={wrapperRef} style={{width: width, height: height}}><canvas ref={chartRef} /></Wrapper>;
 };
 
-export default BarChart;
+export default LineChart;

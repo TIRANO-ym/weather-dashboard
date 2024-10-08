@@ -2,6 +2,8 @@ import styled from "styled-components";
 import BarChart from "../components/charts/bar";
 import { useEffect } from "react";
 import apiService from "../services/apiService";
+import PieChart from "../components/charts/pie";
+import LineChart from "../components/charts/line";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -11,7 +13,7 @@ const Wrapper = styled.div`
 `;
 
 const LeftBox = styled.div`
-  background-color: green;
+  // background-color: green;
   height: 100%;
   display: grid;
   grid-template-rows: 60% 20% 20%;
@@ -28,7 +30,7 @@ const LeftInfo3 = styled.div`
 `;
 
 const RightBox = styled.div`
-  background-color: blue;
+  // background-color: blue;
   height: 100%;
   display: grid;
   grid-template-rows: 20% 35% 45%;
@@ -56,7 +58,9 @@ function Dashboard() {
     <Wrapper>
       <LeftBox>
         <LeftInfo1></LeftInfo1>
-        <LeftInfo2></LeftInfo2>
+        <LeftInfo2>
+          <PieChart/>
+        </LeftInfo2>
         <LeftInfo3></LeftInfo3>
       </LeftBox>
       <RightBox>
@@ -64,7 +68,9 @@ function Dashboard() {
         <RightInfo2>
           <BarChart />
         </RightInfo2>
-        <RightInfo3></RightInfo3>
+        <RightInfo3>
+          <LineChart/>
+        </RightInfo3>
       </RightBox>
     </Wrapper>
   )

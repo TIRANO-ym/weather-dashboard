@@ -5,12 +5,14 @@ import {
   CategoryScale,
   LinearScale,
   PointElement,
-  BarController,
+  LineElement,
+  PolarAreaController,
+  RadialLinearScale,
+  ArcElement,
   TimeScale,
   Title,
   Tooltip,
-  Legend,
-  BarElement,
+  Legend
 } from "chart.js";
 
 const Wrapper = styled.div`
@@ -18,7 +20,7 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-const BarChart = () => {
+const PieChart = () => {
   const wrapperRef = useRef(null);
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
@@ -50,24 +52,20 @@ const BarChart = () => {
   }, []);
 
   const setData = () => {
-    const NUMBER_CFG = [5, 7, 4, 8, 5, 3, 2];
-
     chartData = {
       labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
       datasets: [
         {
           label: 'Dataset 1',
-          data: NUMBER_CFG,
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1
-        },
-        {
-          label: 'Dataset 2',
-          data: NUMBER_CFG,
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
+          data: [5, 7, 4, 8, 5, 3],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.3)',
+            'rgba(75, 192, 192, 0.3)',
+            'rgba(255, 205, 86, 0.3)',
+            'rgba(201, 203, 207, 0.3)',
+            'rgba(54, 162, 235, 0.3)',
+            'rgba(200, 162, 235, 0.3)'
+          ]
         }
       ]
     };
@@ -76,31 +74,32 @@ const BarChart = () => {
   const createChart = () => {
     const ctx = chartRef.current.getContext("2d");
     Chart.register(
-      BarController,
+      PolarAreaController,
       CategoryScale,
       LinearScale,
       PointElement,
-      BarElement,
+      LineElement,
+      RadialLinearScale,
+      ArcElement,
       TimeScale,
       Title,
       Tooltip,
       Legend
     );
     chartInstance = new Chart(ctx, {
-      type: 'bar',
+      type: 'polarArea',
       data: chartData,
       options: {
         maintainAspectRatio: false,
-        // responsive: false,
-        scales: {
-          x: {
-            display: true,
-          },
-          y: {
-            beginAtZero: true,
-            max: 10, // 최대값 설정
-          },
-        },
+        plugins: {
+          legend: {
+            position: 'top',
+          }
+          // title: {
+          //   display: true,
+          //   text: 'Chart.js Polar Area Chart'
+          // }
+        }
       },
     });
   };
@@ -125,4 +124,4 @@ const BarChart = () => {
   return <Wrapper ref={wrapperRef} style={{width: width, height: height}}><canvas ref={chartRef} /></Wrapper>;
 };
 
-export default BarChart;
+export default PieChart;
