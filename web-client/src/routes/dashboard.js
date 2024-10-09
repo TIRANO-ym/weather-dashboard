@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import apiService from "../services/apiService";
 import PieChart from "../components/charts/pie";
 import LineChart from "../components/charts/line";
+import Grid from "../components/charts/grid";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -54,6 +55,11 @@ function Dashboard() {
   //     console.log('#### res: ', res);
   //   });
   // }, []);
+
+  const onGridRowClick = (e) => {
+    console.log(e.data);
+  };
+
   return (
     <Wrapper>
       <LeftBox>
@@ -61,7 +67,9 @@ function Dashboard() {
         <LeftInfo2>
           <PieChart/>
         </LeftInfo2>
-        <LeftInfo3></LeftInfo3>
+        <LeftInfo3>
+          <Grid colDefs={[]} rowData={[]} onRowClick={onGridRowClick} pagination={true}/>
+        </LeftInfo3>
       </LeftBox>
       <RightBox>
         <RightInfo1></RightInfo1>
