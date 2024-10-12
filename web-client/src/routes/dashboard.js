@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import BarChart from "../components/charts/bar";
-import { useEffect } from "react";
-import apiService from "../services/apiService";
+// import { useEffect } from "react";
+// import apiService from "../services/apiService";
 import PieChart from "../components/charts/pie";
 import LineChart from "../components/charts/line";
 import Grid from "../components/charts/grid";
+import Gauge from "../components/charts/gauge";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -72,7 +73,9 @@ function Dashboard() {
         </LeftInfo3>
       </LeftBox>
       <RightBox>
-        <RightInfo1></RightInfo1>
+        <RightInfo1>
+          <Gauge/>
+        </RightInfo1>
         <RightInfo2>
           <BarChart />
         </RightInfo2>
