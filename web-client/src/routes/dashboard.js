@@ -74,7 +74,7 @@ function Dashboard() {
       </LeftBox>
       <RightBox>
         <RightInfo1>
-          <Gauge/>
+          {/* <Gauge/> */}
         </RightInfo1>
         <RightInfo2>
           <BarChart />

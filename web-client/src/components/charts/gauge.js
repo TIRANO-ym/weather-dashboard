@@ -26,9 +26,7 @@ export default function Gauge() {
     // 윈도우 창크기 변경 이벤트 리스너
     window.addEventListener('resize', resizeCanvas, false);
 
-    setTimeout(() => {
-      setData();
-    }, 2000)
+    setData();
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
