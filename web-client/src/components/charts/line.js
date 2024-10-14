@@ -1,43 +1,35 @@
 import React, { useEffect, useRef, useState } from 'react';
-// import { Bar } from 'react-chartjs-2';
-// import 'chart.js/auto';
 import styled from 'styled-components';
-import {
-  Chart,
-  LineController,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  TimeScale,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from "chart.js";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
 const Wrapper = styled.div`
   height: 100%;
   width: 100%;
+  // overflow: hidden;
+  // .highcharts-container {
+  //   position: absolute !important;
+  //   height: 50% !important;
+  // }
 `;
 
-const LineChart = () => {
+const LineChart = ({data}) => {
   const wrapperRef = useRef(null);
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
   let widthRatio, heightRatio;    // 초기 사이즈 비율
 
-  const chartRef = useRef(null);
-  let chartInstance = null;
-  let chartData = null;
+  const [chartOptions, setChartOptions] = useState(null);
+  const PALETTE = [
+    'rgba(255, 99, 132, 1)',    // 빨
+    'rgba(54, 162, 235, 1)',    // 파
+    'rgba(75, 192, 192, 1)',    // 초
+    'rgba(255, 205, 86, 1)',    // 노
+    'rgba(200, 162, 235, 1)',   // 보
+    'rgba(201, 203, 207, 1)'    // 회
+  ];
 
   useEffect(() => {
-    // 차트 데이터 설정
-    setData();
-
-    // 컴포넌트가 처음 렌더링될 때 차트 초기화
-    initializeChart();
-
     // wrapper 전체 비율 계산
     widthRatio = wrapperRef.current.clientWidth / window.innerWidth;
     heightRatio = wrapperRef.current.clientHeight / window.innerHeight;
@@ -45,98 +37,115 @@ const LineChart = () => {
     // 윈도우 창크기 변경 이벤트 리스너
     window.addEventListener('resize', resizeCanvas, false);
 
-    // 컴포넌트가 unmount될 때 차트 파괴
+    // 차트 설정
+    setData();
+    resizeCanvas();
+
     return () => {
-      destroyChart();
       window.removeEventListener('resize', resizeCanvas);
     };
   }, []);
 
+  // useEffect(() => {
+  //   // todo: 데이터 재설정
+  // }, data);
+
   const setData = () => {
-    chartData = {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [
+    const seriesData1 = [
+      ['13:00', 40000],
+      ['14:00', 50000],
+      ['15:00', 60000],
+      ['16:00', 70000],
+      ['17:00', 80000],
+      ['18:00', 90000]
+    ];
+    const seriesData2 = [
+      ['13:00', 60000],
+      ['14:00', 20000],
+      ['15:00', 30000],
+      ['16:00', 80000],
+      ['17:00', 40000],
+      ['18:00', 90000]
+    ];
+    setChartOptions({
+      chart: {
+        type: 'areaspline',
+        // FIXME: 창 조절 시 높이 반영 방안.. 100% 지정시 초과됨, wrapper를 따르지 않음
+        // width: `${window.innerWidth * widthRatio}px`,
+        // height: `${window.innerHeight * heightRatio}px`
+      },
+      title: {
+        text: 'test line chart'
+      },
+      credits: {
+        enabled: false
+      },
+      xAxis: {
+        type: 'category'
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          enabled: false
+        }
+      },
+      legend: {
+        enabled: true,
+        verticalAlign: 'top',
+        align: 'right'
+      },
+      plotOptions: {
+        series: {
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: onClickEvent
+            }
+          }
+          // stacking: 'normal',
+          // dataLabels: {
+          //   enabled: true,
+          //   format: "<b>{point.y}</b>",
+          // }
+        }
+      },
+      series: [
         {
-          label: 'Dataset 1',
-          data: [5, 7, 4, 8, 5, 3, 2],
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1,
-          pointRadius: 5, // 포인트 크기
-          pointBackgroundColor: "rgba(255, 99, 132, 1)", // 포인트 배경색
-          pointBorderColor: "rgba(255, 255, 255, 1)", // 포인트 테두리 색
-          pointHoverRadius: 7, // 호버 시 포인트 크기
-          pointHoverBackgroundColor: "rgba(255, 99, 132, 1)", // 호버 시 포인트 배경색
-          pointHoverBorderColor: "rgba(255, 255, 255, 1)", // 호버 시 포인트 테두리 색
-          fill: 'origin', // 라인 그래프에서 영역 채우기
-          tension: 0.3
+          name: "data1",
+          data: seriesData1,
+          color: PALETTE[0],
+          fillColor : {
+            linearGradient : {
+              x1: 1,
+              y1: 1,
+              x2: 1,
+              y2: 0
+            },
+            stops : [
+              [0, PALETTE[0].replace(', 1)', ', 0)')],
+              [1, PALETTE[0]],
+            ]
+          }
         },
         {
-          label: 'Dataset 2',
-          data: [3, 9, 6, 2, 3, 8, 1],
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 3
+          name: "data2",
+          data: seriesData2,
+          color: PALETTE[1],
+          fillColor : {
+            linearGradient : {
+              x1: 1,
+              y1: 1,
+              x2: 1,
+              y2: 0
+            },
+            stops : [
+              [0, PALETTE[1].replace(', 1)', ', 0)')],
+              [1, PALETTE[1]],
+            ]
+          }
         }
       ]
-    };
-  };
-
-  const createChart = () => {
-    const ctx = chartRef.current.getContext("2d");
-    Chart.register(
-      LineController,
-      CategoryScale,
-      LinearScale,
-      PointElement,
-      LineElement,
-      TimeScale,
-      Title,
-      Tooltip,
-      Legend,
-      Filler
-    );
-    chartInstance = new Chart(ctx, {
-      type: 'line',
-      data: chartData,
-      options: {
-        maintainAspectRatio: false,
-        // responsive: false,
-        scales: {
-          x: {
-            display: true,
-          },
-          y: {
-            beginAtZero: true,
-            max: 10, // 최대값 설정
-          },
-        },
-        // plugins: {
-        //   legend: {
-        //     position: 'top',
-        //   },
-        //   filler: {
-        //     propagate: true
-        //   }
-        //   // title: {
-        //   //   display: true,
-        //   //   text: 'Chart.js Polar Area Chart'
-        //   // }
-        // }
-      },
     });
-  };
-
-  const destroyChart = () => {
-    if (chartInstance) {
-      chartInstance.destroy();
-      chartInstance = null;
-    }
-  };
-
-  const initializeChart = () => {
-    destroyChart(); // 이전 차트 파괴
-    createChart(); // 새로운 차트 생성
   };
 
   const resizeCanvas = () => {
@@ -144,7 +153,19 @@ const LineChart = () => {
     setHeight(window.innerHeight * heightRatio);
   };
 
-  return <Wrapper ref={wrapperRef} style={{width: width, height: height}}><canvas ref={chartRef} /></Wrapper>;
+  const onClickEvent = (e) => {
+    if (e) {
+      console.log(e.point.series.name, e.point.name, e.point.y);
+    }
+  };
+
+  return <Wrapper ref={wrapperRef}>
+    <HighchartsReact
+      highcharts={Highcharts}
+      options={chartOptions}
+      containerProps={{ style: { width: `${width}px`, height: `${height}px` } }}
+    />
+  </Wrapper>;
 };
 
 export default LineChart;

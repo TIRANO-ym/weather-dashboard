@@ -1,42 +1,35 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import {
-  Chart,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  PolarAreaController,
-  RadialLinearScale,
-  ArcElement,
-  TimeScale,
-  Title,
-  Tooltip,
-  Legend
-} from "chart.js";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
 const Wrapper = styled.div`
   height: 100%;
   width: 100%;
+  // overflow: hidden;
+  // .highcharts-container {
+  //   position: absolute !important;
+  //   height: 50% !important;
+  // }
 `;
 
-const PieChart = () => {
+const PieChart = ({data}) => {
   const wrapperRef = useRef(null);
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
   let widthRatio, heightRatio;    // 초기 사이즈 비율
 
-  const chartRef = useRef(null);
-  let chartInstance = null;
-  let chartData = null;
+  const [chartOptions, setChartOptions] = useState(null);
+  const PALETTE = [
+    'rgba(255, 99, 132, 1)',    // 빨
+    'rgba(54, 162, 235, 1)',    // 파
+    'rgba(75, 192, 192, 1)',    // 초
+    'rgba(255, 205, 86, 1)',    // 노
+    'rgba(200, 162, 235, 1)',   // 보
+    'rgba(201, 203, 207, 1)'    // 회
+  ];
 
   useEffect(() => {
-    // 차트 데이터 설정
-    setData();
-
-    // 컴포넌트가 처음 렌더링될 때 차트 초기화
-    initializeChart();
-
     // wrapper 전체 비율 계산
     widthRatio = wrapperRef.current.clientWidth / window.innerWidth;
     heightRatio = wrapperRef.current.clientHeight / window.innerHeight;
@@ -44,76 +37,75 @@ const PieChart = () => {
     // 윈도우 창크기 변경 이벤트 리스너
     window.addEventListener('resize', resizeCanvas, false);
 
-    // 컴포넌트가 unmount될 때 차트 파괴
+    // 차트 설정
+    setData();
+    resizeCanvas();
+
     return () => {
-      destroyChart();
       window.removeEventListener('resize', resizeCanvas);
     };
   }, []);
 
-  const setData = () => {
-    chartData = {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [
-        {
-          label: 'Dataset 1',
-          data: [5, 7, 4, 8, 5, 3],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.3)',
-            'rgba(75, 192, 192, 0.3)',
-            'rgba(255, 205, 86, 0.3)',
-            'rgba(201, 203, 207, 0.3)',
-            'rgba(54, 162, 235, 0.3)',
-            'rgba(200, 162, 235, 0.3)'
-          ]
-        }
-      ]
-    };
-  };
+  // useEffect(() => {
+  //   // todo: 데이터 재설정
+  // }, data);
 
-  const createChart = () => {
-    const ctx = chartRef.current.getContext("2d");
-    Chart.register(
-      PolarAreaController,
-      CategoryScale,
-      LinearScale,
-      PointElement,
-      LineElement,
-      RadialLinearScale,
-      ArcElement,
-      TimeScale,
-      Title,
-      Tooltip,
-      Legend
-    );
-    chartInstance = new Chart(ctx, {
-      type: 'polarArea',
-      data: chartData,
-      options: {
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'top',
+  const setData = () => {
+    const seriesData = [
+      {
+        name: 'data1',
+        y: 5
+      },
+      {
+        name: 'data2',
+        sliced: true,
+        selected: true,
+        y: 2
+      },
+      {
+        name: 'data3',
+        y: 1
+      },
+      {
+        name: 'data4',
+        y: 3
+      }
+    ];
+    setChartOptions({
+      chart: {
+        type: 'pie'
+      },
+      title: {
+        text: null
+      },
+      tooltip: {
+        valueSuffix: '%'
+      },
+      credits: {
+        enabled: false
+      },
+      plotOptions: {
+        series: {
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: onClickEvent
+            }
           }
-          // title: {
-          //   display: true,
-          //   text: 'Chart.js Polar Area Chart'
+          // stacking: 'normal',
+          // dataLabels: {
+          //   enabled: true,
+          //   format: "<b>{point.y}</b>",
           // }
         }
       },
+      series: [
+        {
+          data: seriesData,
+          colors: PALETTE
+        }
+      ]
     });
-  };
-
-  const destroyChart = () => {
-    if (chartInstance) {
-      chartInstance.destroy();
-      chartInstance = null;
-    }
-  };
-
-  const initializeChart = () => {
-    destroyChart(); // 이전 차트 파괴
-    createChart(); // 새로운 차트 생성
   };
 
   const resizeCanvas = () => {
@@ -121,7 +113,19 @@ const PieChart = () => {
     setHeight(window.innerHeight * heightRatio);
   };
 
-  return <Wrapper ref={wrapperRef} style={{width: width, height: height}}><canvas ref={chartRef} /></Wrapper>;
+  const onClickEvent = (e) => {
+    if (e) {
+      console.log(e.point.name, e.point.y);
+    }
+  };
+
+  return <Wrapper ref={wrapperRef}>
+    <HighchartsReact
+      highcharts={Highcharts}
+      options={chartOptions}
+      containerProps={{ style: { width: `${width}px`, height: `${height}px` } }}
+    />
+  </Wrapper>;
 };
 
 export default PieChart;
