@@ -5,7 +5,7 @@ import BarChart from "../components/charts/bar";
 import PieChart from "../components/charts/pie";
 import LineChart from "../components/charts/line";
 import Grid from "../components/charts/grid";
-import Gauge from "../components/charts/gauge";
+import GaugeChart from "../components/charts/gauge";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -74,7 +74,7 @@ function Dashboard() {
       </LeftBox>
       <RightBox>
         <RightInfo1>
-          {/* <Gauge/> */}
+          <GaugeChart/>
         </RightInfo1>
         <RightInfo2>
           <BarChart />
