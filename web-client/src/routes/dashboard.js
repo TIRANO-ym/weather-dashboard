@@ -6,6 +6,7 @@ import PieChart from "../components/charts/pie";
 import LineChart from "../components/charts/line";
 import Grid from "../components/charts/grid";
 import GaugeChart from "../components/charts/gauge";
+import KoreaMap from "../components/charts/map";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -64,7 +65,9 @@ function Dashboard() {
   return (
     <Wrapper>
       <LeftBox>
-        <LeftInfo1></LeftInfo1>
+        <LeftInfo1>
+          <KoreaMap/>
+        </LeftInfo1>
         <LeftInfo2>
           <PieChart/>
         </LeftInfo2>

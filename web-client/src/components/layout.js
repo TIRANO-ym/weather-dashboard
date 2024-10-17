@@ -41,7 +41,6 @@ export default function Layout() {
   };
 
   // FIXME: 메뉴 나타나도 canvas 크기가 고정되어 150px이 채워지지 않음.
-  // FIXME: react-chartjs-2 삭제??
 
   return (
     <Wrapper>
