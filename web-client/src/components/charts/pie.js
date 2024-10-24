@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   // }
 `;
 
-const PieChart = ({data}) => {
+const PieChart = ({data, options}) => {
   const wrapperRef = useRef(null);
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
@@ -85,6 +85,11 @@ const PieChart = ({data}) => {
         enabled: false
       },
       plotOptions: {
+        pie: {
+          dataLabels: {
+            enabled: false,
+          }
+        },
         series: {
           cursor: 'pointer',
           point: {

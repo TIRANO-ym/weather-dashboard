@@ -10,7 +10,7 @@ import KoreaMap from "../components/charts/map";
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: 99%;
   display: grid;
   grid-template-columns: 35% 65%;
 `;
@@ -27,6 +27,8 @@ const LeftInfo1 = styled.div`
 `;
 const LeftInfo2 = styled.div`
   border: 2px solid red;
+  display: grid;
+  grid-template-columns: 35% 65%;
 `;
 const LeftInfo3 = styled.div`
   border: 2px solid red;
@@ -36,7 +38,7 @@ const RightBox = styled.div`
   // background-color: blue;
   height: 100%;
   display: grid;
-  grid-template-rows: 20% 35% 45%;
+  grid-template-rows: 20% 30% 25% 25%;
   padding: 0 10px;
 `;
 
@@ -47,6 +49,9 @@ const RightInfo2 = styled.div`
   border: 2px solid red;
 `;
 const RightInfo3 = styled.div`
+  border: 2px solid red;
+`;
+const RightInfo4 = styled.div`
   border: 2px solid red;
 `;
 
@@ -70,6 +75,7 @@ function Dashboard() {
         </LeftInfo1>
         <LeftInfo2>
           <PieChart/>
+          <Grid colDefs={[]} rowData={[]} onRowClick={onGridRowClick} pagination={true}/>
         </LeftInfo2>
         <LeftInfo3>
           <Grid colDefs={[]} rowData={[]} onRowClick={onGridRowClick} pagination={true}/>
@@ -85,6 +91,9 @@ function Dashboard() {
         <RightInfo3>
           <LineChart/>
         </RightInfo3>
+        <RightInfo4>
+          <LineChart/>
+        </RightInfo4>
       </RightBox>
     </Wrapper>
   )
